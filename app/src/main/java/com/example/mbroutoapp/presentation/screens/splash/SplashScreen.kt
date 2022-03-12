@@ -23,15 +23,21 @@ import com.example.mbroutoapp.ui.theme.Purple700
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.draw.rotate
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.mbroutoapp.navigation.Screen
 
 @Composable
-fun SplashScreen(navController: NavHostController) {
+fun SplashScreen(
+    navController: NavHostController,
+    splashViewModel:SplashViewModel = hiltViewModel()
+) {
 
-    val degree =  remember {
-      Animatable(0f)
+    val degree = remember {
+        Animatable(0f)
     }
+    val onBoardingCompleted by splashViewModel.onBoardingCompleted.collectAsState()
 
-    LaunchedEffect(key1 = true ){
+    LaunchedEffect(key1 = true) {
         degree.animateTo(
             targetValue = 360f,
             animationSpec = tween(
@@ -39,12 +45,19 @@ fun SplashScreen(navController: NavHostController) {
                 delayMillis = 200
             )
         )
+        navController.popBackStack()
+        if (onBoardingCompleted){
+            navController.navigate(Screen.Home.route)
+        }else{
+            navController.navigate(Screen.Welcome.route)
+        }
+
     }
     Splash(degrees = degree.value)
 }
 
 @Composable
-fun Splash(degrees:Float) {
+fun Splash(degrees: Float) {
     if (isSystemInDarkTheme()) {
         Box(
             modifier = Modifier
