@@ -2,6 +2,7 @@ package com.example.mbroutoapp.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.example.mbroutoapp.data.local.BroutoDatabase
 import dagger.Module
 import dagger.Provides
@@ -19,9 +20,13 @@ object AppModule {
     @Singleton
     fun provideDataBase(
         @ApplicationContext context: Context
-    ) = Room.databaseBuilder(
-        context,
-        BroutoDatabase::class.java,
-        "brouto_database"
-    ).build()
+    ): RoomDatabase {
+        return Room.databaseBuilder(
+            context,
+            BroutoDatabase::class.java,
+            "brouto_database"
+        ).build()
+    }
+
+
 }

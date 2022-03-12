@@ -2,7 +2,9 @@ package com.example.mbroutoapp.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity(tableName = "hero_table")
 data class Hero(
     @PrimaryKey(autoGenerate = false)
