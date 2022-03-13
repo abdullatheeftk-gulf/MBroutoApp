@@ -5,6 +5,7 @@ import com.example.mbroutoapp.data.repository.DataStoreOperationImpl
 import com.example.mbroutoapp.data.repository.Repository
 import com.example.mbroutoapp.domain.repository.DataStoreOperations
 import com.example.mbroutoapp.domain.use_cases.UseCases
+import com.example.mbroutoapp.domain.use_cases.get_all_heroes.GetAllHeroesUseCase
 import com.example.mbroutoapp.domain.use_cases.read_onboarding.ReadOnBoardingUseCase
 import com.example.mbroutoapp.domain.use_cases.save_onboarding.SaveOnBoardingUseCase
 import dagger.Module
@@ -23,7 +24,7 @@ object RepositoryModule {
     fun provideDataStoreOperation(
         @ApplicationContext context:Context
     ):DataStoreOperations{
-        return DataStoreOperationImpl(context =context )
+        return DataStoreOperationImpl(context = context )
     }
 
 
@@ -32,8 +33,9 @@ object RepositoryModule {
     fun provideUseCases(repository: Repository):UseCases{
 
         return UseCases(
-            saveOnBoardingUseCase = SaveOnBoardingUseCase(repository),
-            readOnBoardingUseCase = ReadOnBoardingUseCase(repository)
+            saveOnBoardingUseCase = SaveOnBoardingUseCase(repository = repository),
+            readOnBoardingUseCase = ReadOnBoardingUseCase(repository = repository),
+            getAllHeroesUseCase = GetAllHeroesUseCase(repository = repository)
         )
     }
 }

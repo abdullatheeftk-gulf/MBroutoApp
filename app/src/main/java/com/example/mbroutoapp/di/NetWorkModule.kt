@@ -1,6 +1,10 @@
 package com.example.mbroutoapp.di
 
+import androidx.paging.ExperimentalPagingApi
+import com.example.mbroutoapp.data.local.BroutoDatabase
 import com.example.mbroutoapp.data.remote.BroutoApi
+import com.example.mbroutoapp.data.repository.RemoteDataSourceImpl
+import com.example.mbroutoapp.domain.repository.RemoteDataSource
 import com.example.mbroutoapp.util.Constants.BASE_URL
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -15,6 +19,7 @@ import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
+@ExperimentalPagingApi
 @Module
 @InstallIn(SingletonComponent::class)
 object NetWorkModule {
@@ -45,5 +50,18 @@ object NetWorkModule {
     @Singleton
     fun provideBroutoApi(retrofit: Retrofit):BroutoApi{
       return retrofit.create(BroutoApi::class.java)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideRemoteDataSource(
+        broutoApi: BroutoApi,
+        broutoDatabase: BroutoDatabase
+    ):RemoteDataSource{
+        return RemoteDataSourceImpl(
+            broutoDatabase = broutoDatabase,
+            broutoApi = broutoApi
+        )
     }
 }
