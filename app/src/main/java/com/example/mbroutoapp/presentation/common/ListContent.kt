@@ -1,9 +1,11 @@
 package com.example.mbroutoapp.presentation.common
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
@@ -24,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.items
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.mbroutoapp.R
@@ -33,11 +36,31 @@ import com.example.mbroutoapp.presentation.components.RatingWidget
 import com.example.mbroutoapp.ui.theme.*
 import com.example.mbroutoapp.util.Constants.BASE_URL
 
+@ExperimentalCoilApi
 @Composable
 fun ListContent(
     heroes: LazyPagingItems<Hero>,
     navController: NavHostController
 ) {
+    Log.d("ListContent", "${heroes.loadState} ")
+    LazyColumn(
+        contentPadding = PaddingValues(all = SMALL_PADDING),
+        verticalArrangement = Arrangement.spacedBy(SMALL_PADDING)
+    ) {
+        items(
+            items = heroes,
+            key = { hero ->
+               hero.id
+            }
+        ){value: Hero? ->
+            value?.let {
+                HeroItem(
+                    hero =it,
+                    navController = navController
+                )
+            }
+        }
+    }
 
 }
 
@@ -60,7 +83,7 @@ fun HeroItem(
             },
         contentAlignment = Alignment.BottomStart
     ) {
-        Surface(shape = Shapes.large) {
+        Surface(shape = RoundedCornerShape(size = LARGE_PADDING)) {
             Image(
                 modifier = Modifier.fillMaxSize(),
                 painter = imagePainter,
@@ -123,40 +146,42 @@ fun HeroItem(
 @Preview
 @Composable
 fun HeroItemPreview() {
-   HeroItem(
-       hero = Hero(
-           id = 1,
-           name = "Sasuke",
-           image = "",
-           about = "Sasuke Uchiha (うちはサスケ, Uchiha Sasuke) is one of the last surviving members of Konohagakure's Uchiha clan. After his older brother, Itachi, slaughtered their clan, Sasuke made it his mission in life to avenge them by killing Itachi. He is added to Team 7 upon becoming a ninja and, through competition with his rival and best friend, Naruto Uzumaki.",
-           rating = 5.0,
-           power = 98,
-           month = "July",
-           day = "23rd",
-           family = listOf(
-               "Fugaku",
-               "Mikoto",
-               "Itachi",
-               "Sarada",
-               "Sakura"
-           ),
-           abilities = listOf(
-               "Sharingan",
-               "Rinnegan",
-               "Sussano",
-               "Amateratsu",
-               "Intelligence"
-           ),
-           natureTypes = listOf(
-               "Lightning",
-               "Fire",
-               "Wind",
-               "Earth",
-               "Water"
-           )
-       ),
-       navController = rememberNavController() )
+    HeroItem(
+        hero = Hero(
+            id = 1,
+            name = "Sasuke",
+            image = "",
+            about = "Sasuke Uchiha (うちはサスケ, Uchiha Sasuke) is one of the last surviving members of Konohagakure's Uchiha clan. After his older brother, Itachi, slaughtered their clan, Sasuke made it his mission in life to avenge them by killing Itachi. He is added to Team 7 upon becoming a ninja and, through competition with his rival and best friend, Naruto Uzumaki.",
+            rating = 5.0,
+            power = 98,
+            month = "July",
+            day = "23rd",
+            family = listOf(
+                "Fugaku",
+                "Mikoto",
+                "Itachi",
+                "Sarada",
+                "Sakura"
+            ),
+            abilities = listOf(
+                "Sharingan",
+                "Rinnegan",
+                "Sussano",
+                "Amateratsu",
+                "Intelligence"
+            ),
+            natureTypes = listOf(
+                "Lightning",
+                "Fire",
+                "Wind",
+                "Earth",
+                "Water"
+            )
+        ),
+        navController = rememberNavController()
+    )
 }
+
 @ExperimentalCoilApi
 @Preview(uiMode = UI_MODE_NIGHT_YES)
 @Composable
@@ -193,5 +218,6 @@ fun HeroItemDarkPreview() {
                 "Water"
             )
         ),
-        navController = rememberNavController() )
+        navController = rememberNavController()
+    )
 }

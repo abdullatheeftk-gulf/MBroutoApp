@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @ExperimentalPagingApi
+@ExperimentalSerializationApi
 @Module
 @InstallIn(SingletonComponent::class)
 object NetWorkModule {
@@ -28,12 +29,12 @@ object NetWorkModule {
     @Singleton
     fun provideHttpClient():OkHttpClient{
         return OkHttpClient.Builder()
-            .readTimeout(15,TimeUnit.MINUTES)
-            .connectTimeout(15,TimeUnit.MINUTES)
+            .readTimeout(15,TimeUnit.SECONDS)
+            .connectTimeout(15,TimeUnit.SECONDS)
             .build()
     }
 
-    @ExperimentalSerializationApi
+
     @Provides
     @Singleton
     fun provideRetrofitInstance(okHttpClient: OkHttpClient):Retrofit{
@@ -41,7 +42,7 @@ object NetWorkModule {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(Json.asConverterFactory(contentType = contentType))
+            .addConverterFactory(Json.asConverterFactory(contentType))
             .build()
     }
 

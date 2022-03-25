@@ -9,12 +9,12 @@ import com.example.mbroutoapp.domain.model.HeroRemoteKeys
 @Dao
 interface HeroRemoteKeysDao {
 
-    @Query("SELECT * FROM hero_remote_key_table WHERE id = :heroId")
-    suspend fun getHeroRemoteKeys(heroId:Int):HeroRemoteKeys?
+    @Query("SELECT * FROM hero_remote_keys_table WHERE id = :heroId")
+    suspend fun getRemoteKeys(heroId:Int):HeroRemoteKeys?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAllRemoteKeys(heroRemoteKeys:List<HeroRemoteKeys>)
 
-    @Query("DELETE FROM hero_remote_key_table")
+    @Query("DELETE FROM hero_remote_keys_table")
     suspend fun deleteAllFromHeroRemoteKeys()
 }

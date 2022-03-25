@@ -6,10 +6,12 @@ import androidx.activity.compose.setContent
 import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.annotation.ExperimentalCoilApi
 import com.example.mbroutoapp.navigation.SetUpNavGraph
 import com.example.mbroutoapp.ui.theme.MBroutoAppTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
+@ExperimentalCoilApi
 @ExperimentalPagerApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
