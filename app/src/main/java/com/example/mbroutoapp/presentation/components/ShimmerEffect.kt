@@ -4,6 +4,7 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -13,19 +14,26 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.mbroutoapp.ui.theme.*
 
 @Composable
 fun ShimmerEffect() {
+    LazyColumn(
+        contentPadding = PaddingValues(all = SMALL_PADDING),
+        verticalArrangement = Arrangement.spacedBy(space = SMALL_PADDING)
+    ) {
+        items(count=2){
+            AnimatedShimmerItem()
+        }
 
+    }
 }
 
 @Composable
 fun AnimatedShimmerItem() {
     val transition = rememberInfiniteTransition()
     val alphaAnim by transition.animateFloat(
-        initialValue = 1f ,
+        initialValue = 1f,
         targetValue = 0f,
         animationSpec = infiniteRepeatable(
             animation = tween(
@@ -39,7 +47,7 @@ fun AnimatedShimmerItem() {
 }
 
 @Composable
-fun ShimmerItem(alpha:Float) {
+fun ShimmerItem(alpha: Float) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -62,7 +70,7 @@ fun ShimmerItem(alpha:Float) {
                 shape = RoundedCornerShape(size = SMALL_PADDING)
             ) {}
             Spacer(modifier = Modifier.padding(all = SMALL_PADDING))
-            repeat(times = 3){
+            repeat(times = 3) {
                 Surface(
                     modifier = Modifier
                         .alpha(alpha = alpha)
@@ -74,9 +82,9 @@ fun ShimmerItem(alpha:Float) {
                 ) {}
                 Spacer(modifier = Modifier.padding(all = EXTRA_SMALL_PADDING))
             }
-            
+
             Row(modifier = Modifier.fillMaxWidth()) {
-                repeat(times = 5){
+                repeat(times = 5) {
                     Surface(
                         modifier = Modifier
                             .alpha(alpha = alpha)
@@ -91,7 +99,6 @@ fun ShimmerItem(alpha:Float) {
             }
 
 
-
         }
     }
 }
@@ -99,7 +106,7 @@ fun ShimmerItem(alpha:Float) {
 @Preview
 @Composable
 fun ShimmerItemPreview() {
-   AnimatedShimmerItem()
+    AnimatedShimmerItem()
 }
 
 @Preview(uiMode = UI_MODE_NIGHT_YES)
