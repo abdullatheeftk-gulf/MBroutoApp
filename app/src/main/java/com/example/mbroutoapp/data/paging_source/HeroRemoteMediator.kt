@@ -50,10 +50,8 @@ class HeroRemoteMediator @Inject constructor(
                 }
 
             }
-            Log.i("myTest", "load: $page")
 
             val response = broutoApi.getAllHeroes(page = page)
-            Log.i("myTest", "load: $response")
             if (response.heroes.isNotEmpty()) {
                 broutoDatabase.withTransaction {
                     if (loadType == LoadType.REFRESH) {
