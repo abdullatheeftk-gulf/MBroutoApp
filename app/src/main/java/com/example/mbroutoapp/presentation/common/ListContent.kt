@@ -44,7 +44,6 @@ fun ListContent(
     heroes: LazyPagingItems<Hero>,
     navController: NavHostController
 ) {
-    Log.d("ListContent", "${heroes.loadState} ")
     val result = handlePagingResult(heroes = heroes)
     if (result) {
         LazyColumn(
@@ -88,6 +87,7 @@ fun handlePagingResult(
                 false
             }
             error != null -> {
+                EmptyScreen(error = error)
                 false
             }
             else -> true

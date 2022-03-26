@@ -10,6 +10,8 @@ import com.example.mbroutoapp.data.local.BroutoDatabase
 import com.example.mbroutoapp.data.remote.BroutoApi
 import com.example.mbroutoapp.domain.model.Hero
 import com.example.mbroutoapp.domain.model.HeroRemoteKeys
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @ExperimentalPagingApi
@@ -20,6 +22,26 @@ class HeroRemoteMediator @Inject constructor(
 
     private val heroDao = broutoDatabase.heroDao()
     private val heroRemoteKeysDao = broutoDatabase.heroRemoteKeysDao()
+
+    override suspend fun initialize(): InitializeAction {
+        val currentTime = System.currentTimeMillis()
+        val lastUpdated = heroRemoteKeysDao.getRemoteKeys(heroId = 1)?.lastUpdated ?: 0L
+        val cacheTimeOut = 5
+
+        Log.w("RemoteMediator", "Current time: ${parseMillis(currentTime)}", )
+        Log.d("RemoteMediator", "Last Updated: ${parseMillis(lastUpdated)}", )
+
+
+        val diffInMinute = (currentTime - lastUpdated) / 1000 / 60
+
+        return if (diffInMinute.toInt() <= cacheTimeOut) {
+            Log.i("RemoteMediator", "Up to date ")
+            InitializeAction.SKIP_INITIAL_REFRESH
+        } else {
+            Log.e("RemoteMediator", "Refresh ")
+            InitializeAction.LAUNCH_INITIAL_REFRESH
+        }
+    }
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Hero>): MediatorResult {
 
@@ -74,7 +96,7 @@ class HeroRemoteMediator @Inject constructor(
             }
             MediatorResult.Success(endOfPaginationReached = response.nextPage == null)
         } catch (e: Exception) {
-            Log.e("myTest", "load: ${e.message}", )
+            Log.e("myTest", "load: ${e.message}")
             return MediatorResult.Error(e)
         }
     }
@@ -109,5 +131,11 @@ class HeroRemoteMediator @Inject constructor(
         }?.data?.lastOrNull()?.let { hero ->
             heroRemoteKeysDao.getRemoteKeys(heroId = hero.id)
         }
+    }
+
+    private fun parseMillis(millis: Long): String {
+        val date = Date(millis)
+        val format = SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.ROOT)
+        return format.format(date)
     }
 }
