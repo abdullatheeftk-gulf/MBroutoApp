@@ -1,17 +1,15 @@
-package com.example.mbroutoapp.domain.use_cases.get_all_heroes
+package com.example.mbroutoapp.domain.use_cases.search_heroes
 
 import androidx.paging.PagingData
 import com.example.mbroutoapp.data.repository.Repository
 import com.example.mbroutoapp.domain.model.Hero
 import kotlinx.coroutines.flow.Flow
 
-class GetAllHeroesUseCase(
+class SearchHeroesUseCase(
     private val repository: Repository
 ) {
 
-    operator fun invoke():Flow<PagingData<Hero>>{
-       return repository.getAllHeroes()
+    operator fun invoke(query:String): Flow<PagingData<Hero>> {
+        return repository.searchHeroes(query = query)
     }
-
-
 }
